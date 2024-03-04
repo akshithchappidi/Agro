@@ -1,6 +1,6 @@
-import Head from 'next/head'
-import Link from 'next/link';
-import Image from 'next/image';
+import Head from "next/head";
+import Link from "next/link";
+import Image from "next/image";
 
 export default function Home() {
   return (
@@ -44,7 +44,7 @@ export default function Home() {
           </div>
           <div className="w-1/2 p-4">
             <h1 className="text-[3vw] font-bold mb-2">AI Predictions</h1>
-            <p className='text-[2vw]'>No more guesswork!<br></br> Our AI whips through soil moisture data with decision trees, predicting <strong>perfect irrigation and crop health.</strong> <br></br>Past & present sensor readings fuel its insights, guiding pro-active water management for precision farming.</p>
+            <p className="text-[2vw]">No more guesswork!<br></br> Our AI whips through soil moisture data with decision trees, predicting <strong>perfect irrigation and crop health.</strong> <br></br>Past & present sensor readings fuel its insights, guiding pro-active water management for precision farming.</p>
             {/* <button className="mt-4 bg-green-300 text-black px-4 py-2 rounded">Dive In</button> */}
             <Link href="/ai">
               <button className="mt-4 bg-green-500 text-black text-[1.5vw] px-4 py-2 rounded">Dive In</button>
@@ -57,8 +57,8 @@ export default function Home() {
         <section id="section3" className="mb-4 bg-white flex">
           <div className="w-1/2 p-4">
             <h1 className="text-5xl font-bold mb-2">Sensor</h1>
-            <p className='text-[2vw]'>Our cutting-edge sensor technology brings a new dawn to farming,<br>
-            </br> offering unparalleled precision and insight into soil moisture levels. Picture this: as the sun rises over lush green fields, <br></br>our sensors are already hard at work, delicately measuring the very essence of soil vitality. <br></br>For farmers, this means empowerment like never before – <strong>no more guesswork, no more uncertainty.</strong> With our sensors, they unlock the secret language of the land, understanding its needs with a clarity that transforms their approach to cultivation. From the smallest seedling to the tallest crop, every plant receives exactly what it requires, thanks to our sensor's unmatched accuracy and reliability. Join us in embracing a future where farming isn't just about growing crops; it's about nurturing a sustainable, bountiful harvest for generations to come.</p>
+            <p className="text-[2vw]">Our cutting-edge sensor technology brings a new dawn to farming,<br>
+</br> offering unparalleled precision and insight into soil moisture levels. Picture this: as the sun rises over lush green fields, <br></br>our sensors are already hard at work, delicately measuring the very essence of soil vitality. <br></br>For farmers, this means empowerment like never before – <strong>no more guesswork, no more uncertainty.</strong> With our sensors, they unlock the secret language of the land, understanding its needs with a clarity that transforms their approach to cultivation. From the smallest seedling to the tallest crop, every plant receives exactly what it requires, thanks to our sensor&apos;s unmatched accuracy and reliability. Join us in embracing a future where farming isn&apos;t just about growing crops; it&apos;s about nurturing a sustainable, bountiful harvest for generations to come.</p>
           <div className ="py-16">
           <p className="text-lg text-gray-700 leading-relaxed text-center p-5 bg-gray-200 border border-gray-300 rounded shadow-md">We extend our heartfelt gratitude to the University of Agricultural Sciences, GKVK (Gandhi Krishi Vignana Kendra) Bangalore, for their invaluable support and collaboration in the development of our innovative sensor technology. Their expertise, guidance, and resources have been instrumental in helping us realize our vision of creating a groundbreaking solution for soil moisture monitoring in agriculture. With their unwavering commitment to agricultural research and education, GKVK has played a pivotal role in empowering farmers and advancing sustainable farming practices. We are deeply grateful for their partnership and look forward to continuing our journey of innovation and impact together.</p>
           </div>
@@ -79,7 +79,7 @@ export default function Home() {
           </div>
           <div className="w-1/2">
           <h1 className="text-2xl font-bold mb-2">Contact US</h1>
-            <p className='text-[2vw]'>
+            <p className="text-[2vw]">
                 
                   Lokesh Sv: +9199999999
                   <br></br>Manish Y : +9199999999

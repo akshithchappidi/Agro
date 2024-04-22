@@ -41,7 +41,16 @@ const Form: FC<FormProps> = ({ onInputChange, onSubmit }) => {
     );
 };
 
-const crops = {
+type CropInfo = {
+    image: string;
+    tips: string;
+};
+
+type Crops = {
+    [crop: string]: CropInfo;
+};
+
+const crops: Crops = {
     'Coffee': {
         image: './Coffee.jfif',
         tips: 'Cultivation tips for Crop1'
@@ -53,11 +62,12 @@ const crops = {
     // ... add more crops as needed ...
 };
 
+
 export default function Home() {
     const [inputs, setInputs] = useState({ N: '', P: '', K: '', temperature: '', humidity: '', ph: '', rainfall: '' });
     const [result, setResult] = useState(null);
     const [location, setLocation] = useState('');
-    const [selectedCrop, setSelectedCrop] = useState(null);
+    const [selectedCrop, setSelectedCrop] = useState<CropInfo | null>(null);
 
     const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
         setInputs({ ...inputs, [event.target.name]: event.target.value });

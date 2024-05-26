@@ -2,11 +2,12 @@ import { useState, ChangeEvent, FC, useEffect } from 'react';
 import axios from 'axios';
 import '../styles/styles.css'
 interface FormProps {
-    onInputChange: (event: ChangeEvent<HTMLInputElement>) => void;
+    onInputChange: (event: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
     onSubmit: (event: ChangeEvent<HTMLFormElement>) => void;
+    algorithm: Algorithm | '';
 }
 
-const Form: FC<FormProps> = ({ onInputChange, onSubmit }) => {
+const Form: FC<FormProps> = ({ onInputChange, onSubmit, algorithm }) => {
     const fieldDescriptions: { [key: string]: string } = {
         'Nitrogen': 'Enter the Nitrogen content',
         'Phosphorous': 'Enter the Phosphorous content',
@@ -20,7 +21,7 @@ const Form: FC<FormProps> = ({ onInputChange, onSubmit }) => {
     return (
         <div className="container">
         <form onSubmit={onSubmit}>
-        {['Nitrogen', 'Phosphorous', 'Potassium', 'temperature', 'humidity', 'ph', 'rainfall'].map((name) => (
+        {['N', 'P', 'K', 'temperature', 'humidity', 'ph', 'rainfall'].map((name) => (
             <div key={name}>
                 <div>
                     <label className="label" htmlFor={name}>
@@ -33,6 +34,20 @@ const Form: FC<FormProps> = ({ onInputChange, onSubmit }) => {
                 </div>
             </div>
         ))}
+        <div>
+            <label className="label" htmlFor="algorithm">
+                Algorithm
+            </label>
+        </div>
+        <div>
+            <select className="input" name="algorithm" value={algorithm} onChange={onInputChange} required>
+                <option value="">Select an algorithm</option>
+                <option value="SVC">SVC</option>
+                <option value="KNN">KNN</option>
+                <option value="RFC">RFC</option>
+                <option value="GBC">GBC</option>
+            </select>
+        </div>
             <button type="submit" className="button">
                 Submit
             </button>
@@ -62,29 +77,70 @@ const crops: Crops = {
     // ... add more crops as needed ...
 };
 
+type Algorithm = 'SVC' | 'KNN' | 'RFC' | 'GBC' ;
+
+type Inputs = {
+    N: string;
+    P: string;
+    K: string;
+    temperature: string;
+    humidity: string;
+    ph: string;
+    rainfall: string;
+    algorithm: Algorithm | '';
+}
+
 
 export default function Home() {
-    const [inputs, setInputs] = useState({ N: '', P: '', K: '', temperature: '', humidity: '', ph: '', rainfall: '' });
+    const [inputs, setInputs] = useState<Inputs>({ N: '', P: '', K: '', temperature: '', humidity: '', ph: '', rainfall: '', algorithm: '' });
     const [result, setResult] = useState(null);
     const [location, setLocation] = useState('');
     const [selectedCrop, setSelectedCrop] = useState<CropInfo | null>(null);
 
-    const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-        setInputs({ ...inputs, [event.target.name]: event.target.value });
+    const handleInputChange = (event: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+        const { name, value } = event.target;
+        if (name === 'algorithm') {
+            setInputs(inputs => ({ ...inputs, [name]: value as Algorithm | '' }));
+        } else {
+            setInputs(inputs => ({ ...inputs, [name]: value ? Number(value) : 0 }));
+        }
     };
 
     const handleSubmit = async (event: ChangeEvent<HTMLFormElement>) => {
         event.preventDefault();
-        console.log("Button Clicked");
-        // try {
-        //     const response = await axios.post('https://agro-agro-ai.onrender.com/predict', { input: Object.values(inputs).map(Number) });
-        //     setResult(response.data);
-        // } catch (error) {
-        //     console.error('There was an error!', error);
-        // }
-        const cropNames = Object.keys(crops);
-        const randomCropName = cropNames[Math.floor(Math.random() * cropNames.length)];
-        setSelectedCrop(crops[randomCropName]);
+        const apiUrlMap: { [key in Algorithm]: string } = {
+            'SVC': 'http://localhost:5000/predict',
+            'KNN': 'http://localhost:5000/predictKNN',
+            'RFC': 'http://localhost:5000/predictRFC',
+            'GBC': 'http://localhost:5000/predictGBC',
+        };
+        
+        if (inputs.algorithm !== '') {
+            const apiUrl = apiUrlMap[inputs.algorithm];
+            const dataToSend = {
+                N: Number(inputs.N),
+                P: Number(inputs.P),
+                K: Number(inputs.K),
+                temperature: Number(inputs.temperature),
+                humidity: Number(inputs.humidity),
+                ph: Number(inputs.ph),
+                rainfall: Number(inputs.rainfall)
+            };
+            
+            const formattedDataToSend = { input: Object.values(dataToSend) };
+            console.log('API URL:', apiUrl);
+            console.log('Data to send:', formattedDataToSend);
+            try {
+                const response = await axios.post(apiUrl, formattedDataToSend);
+                setResult(response.data.prediction);
+                setSelectedCrop(crops[response.data.prediction]);
+            } catch (error) {
+                console.error('There was an error!', error);
+            }
+        }
+        else{
+            console.error('Please select an algorithm!');
+        }
     };
     useEffect(() => {
         navigator.geolocation.getCurrentPosition(async function(position) {
@@ -99,7 +155,7 @@ export default function Home() {
         <p className="text-gray-500">Your Location: <span className="font-bold">{location}</span></p>
         {/* <div className="flex flex-row items-center justify-center min-h-screen py-2 bg-green-200"> */}
         
-            <Form onInputChange={handleInputChange} onSubmit={handleSubmit} />
+        <Form onInputChange={handleInputChange} onSubmit={handleSubmit} algorithm={inputs.algorithm} />
             {result && (
                 <div className="container mx-auto max-w-md shadow-lg mt-10 rounded p-5 bg-white">
                     <p>Result: {result}</p>

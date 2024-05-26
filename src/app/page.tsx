@@ -6,7 +6,7 @@ export default function Home() {
   return (
     <div className="font-sans text-gray-900 antialiased">
       <Head>
-        <title>My Website</title>
+        <title>Agro</title>
         <meta name="description" content="Agro" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
